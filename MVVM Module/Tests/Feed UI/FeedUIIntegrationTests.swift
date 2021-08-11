@@ -301,11 +301,29 @@ final class FeedUIIntegrationTests: XCTestCase {
 
 		sut.simulateUserInitiatedFeedReload()
 		XCTAssertTrue(sut.isShowingLoadingIndicator, "Loading indicator must be shown when the user sends a second reload feed action")
-		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should only be shown after an user initiated a second feed loading completes with error")
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should only be shown after a second user initiated feed loading completes with error")
 
 		loader.completeFeedLoading(with: [makeImage()], at: 2)
-		XCTAssertFalse(sut.isShowingLoadingIndicator, "Loading indicator must be hidden after a second user initiated feed loading completes with an error")
-		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden after a second user initiated feed loading completes with an success")
+		XCTAssertFalse(sut.isShowingLoadingIndicator, "Loading indicator must be hidden after a second user initiated feed loading completes successfully")
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden after a second user initiated feed loading completes successfully")
+	}
+
+	func test_feedLoadingErrorView_disappearAfterUserTapAction() {
+		let (sut, loader) = makeSUT()
+		sut.loadViewIfNeeded()
+
+		loader.completeFeedLoadingWithError(at: 0)
+		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should only be shown after the feed loading completes with error")
+		sut.simulateErrorViewTapAction()
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Error view should be hidden after the user taps on it")
+
+		sut.simulateUserInitiatedFeedReload()
+
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden after an user initiated feed loading")
+		loader.completeFeedLoadingWithError(at: 1)
+		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should be shown after an user initiated feed loading completes with an error")
+		sut.simulateErrorViewTapAction()
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden when the user taps the error view after an initiated feed loading completed with an error")
 	}
 
 	// MARK: - Helpers
