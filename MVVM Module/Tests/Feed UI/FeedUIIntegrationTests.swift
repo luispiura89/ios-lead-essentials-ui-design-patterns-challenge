@@ -290,6 +290,22 @@ final class FeedUIIntegrationTests: XCTestCase {
 		loader.completeFeedLoadingWithError()
 		XCTAssertFalse(sut.isShowingLoadingIndicator, "Loading indicator must be hidden after the feed loading completes with an error")
 		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should be visible after the feed loading completes with an error")
+
+		sut.simulateUserInitiatedFeedReload()
+		XCTAssertTrue(sut.isShowingLoadingIndicator, "Loading indicator must be shown when the user sends a reload feed action")
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should only be shown after an user initiated feed loading completes with error")
+
+		loader.completeFeedLoadingWithError(at: 1)
+		XCTAssertFalse(sut.isShowingLoadingIndicator, "Loading indicator must be hidden after an user initiated feed loading completes with an error")
+		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should be visible after an user initiated feed loading completes with an error")
+
+		sut.simulateUserInitiatedFeedReload()
+		XCTAssertTrue(sut.isShowingLoadingIndicator, "Loading indicator must be shown when the user sends a second reload feed action")
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should only be shown after an user initiated a second feed loading completes with error")
+
+		loader.completeFeedLoading(with: [makeImage()], at: 2)
+		XCTAssertFalse(sut.isShowingLoadingIndicator, "Loading indicator must be hidden after a second user initiated feed loading completes with an error")
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden after a second user initiated feed loading completes with an success")
 	}
 
 	// MARK: - Helpers
