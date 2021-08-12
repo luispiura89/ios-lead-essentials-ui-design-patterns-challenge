@@ -29,7 +29,7 @@ final class FeedViewModel {
 			if let feed = try? result.get() {
 				self?.onFeedLoad?(feed)
 			} else {
-				self?.onLoadingErrorStateChanged?("Completed with an error")
+				self?.onLoadingErrorStateChanged?(Localized.Feed.loadError)
 			}
 			self?.onLoadingStateChange?(false)
 		}
