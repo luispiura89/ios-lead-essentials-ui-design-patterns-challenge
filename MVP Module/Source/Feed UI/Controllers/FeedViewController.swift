@@ -9,6 +9,8 @@ protocol FeedViewControllerDelegate {
 }
 
 public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView {
+	@IBOutlet var errorView: ErrorView?
+
 	var delegate: FeedViewControllerDelegate?
 
 	private var tableModel = [FeedImageCellController]() {
@@ -28,9 +30,11 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
 	func display(_ viewModel: FeedLoadingViewModel) {
 		if viewModel.isLoading {
 			refreshControl?.beginRefreshing()
+			errorView?.hideMessage()
 		} else {
 			refreshControl?.endRefreshing()
 		}
+		viewModel.errorMessage.map { errorView?.show(message: $0) }
 	}
 
 	func display(_ cellControllers: [FeedImageCellController]) {
