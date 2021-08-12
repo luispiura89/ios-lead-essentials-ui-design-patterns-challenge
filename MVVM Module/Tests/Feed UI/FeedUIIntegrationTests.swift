@@ -284,10 +284,11 @@ final class FeedUIIntegrationTests: XCTestCase {
 		let (sut, loader) = makeSUT()
 
 		sut.loadViewIfNeeded()
+
 		XCTAssertTrue(sut.isShowingLoadingIndicator, "Loading indicator must be shown when there's a feed loading in progress")
 		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should only be shown after the feed loading completes with error")
-
 		loader.completeFeedLoadingWithError()
+
 		XCTAssertFalse(sut.isShowingLoadingIndicator, "Loading indicator must be hidden after the feed loading completes with an error")
 		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should be visible after the feed loading completes with an error")
 
