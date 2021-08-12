@@ -48,6 +48,14 @@ extension FeedViewController {
 		return tableView.tableHeaderView?.alpha == 1
 	}
 
+	var loadingErrorMessage: String {
+		guard let errorView = tableView.tableHeaderView as? ErrorView else {
+			return ""
+		}
+
+		return errorView.message ?? ""
+	}
+
 	func simulateErrorViewTapAction() {
 		guard let errorView = tableView.tableHeaderView as? ErrorView else {
 			return
