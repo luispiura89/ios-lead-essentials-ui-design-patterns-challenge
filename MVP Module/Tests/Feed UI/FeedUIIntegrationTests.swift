@@ -309,6 +309,24 @@ final class FeedUIIntegrationTests: XCTestCase {
 		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden after a second user initiated feed loading completes successfully")
 	}
 
+	func test_feedLoadingErrorView_disappearAfterUserTapAction() {
+		let (sut, loader) = makeSUT()
+		sut.loadViewIfNeeded()
+		loader.completeFeedLoadingWithError(at: 0)
+
+		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should be visible after the feed loading completes with an error")
+		sut.simulateErrorViewTapAction()
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Error view should be hidden after the user taps on it")
+
+		sut.simulateUserInitiatedFeedReload()
+
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden after an user initiated feed loading")
+		loader.completeFeedLoadingWithError(at: 1)
+		XCTAssertTrue(sut.isShowingLoadingErrorView, "Loading error view should be shown after an user initiated feed loading completes with an error")
+		sut.simulateErrorViewTapAction()
+		XCTAssertFalse(sut.isShowingLoadingErrorView, "Loading error view should be hidden when the user taps the error view after an initiated feed loading completed with an error")
+	}
+
 	// MARK: - Helpers
 
 	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {

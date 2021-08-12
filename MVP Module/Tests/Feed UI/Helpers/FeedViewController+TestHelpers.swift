@@ -48,6 +48,14 @@ extension FeedViewController {
 		return tableView.tableHeaderView?.alpha == 1
 	}
 
+	func simulateErrorViewTapAction() {
+		guard let errorView = tableView.tableHeaderView as? ErrorView else {
+			return
+		}
+
+		errorView.button.simulate(event: .touchUpInside)
+	}
+
 	func numberOfRenderedFeedImageViews() -> Int {
 		return tableView.numberOfRows(inSection: feedImagesSection)
 	}
