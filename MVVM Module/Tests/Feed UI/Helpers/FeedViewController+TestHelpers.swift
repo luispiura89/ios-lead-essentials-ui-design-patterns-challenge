@@ -49,19 +49,11 @@ extension FeedViewController {
 	}
 
 	var loadingErrorMessage: String {
-		guard let errorView = tableView.tableHeaderView as? ErrorView else {
-			return ""
-		}
-
-		return errorView.message ?? ""
+		(tableView.tableHeaderView as? ErrorView).map { $0.message ?? "" } ?? ""
 	}
 
 	func simulateErrorViewTapAction() {
-		guard let errorView = tableView.tableHeaderView as? ErrorView else {
-			return
-		}
-
-		errorView.button.simulate(event: .touchUpInside)
+		(tableView.tableHeaderView as? ErrorView).map { $0.button.simulate(event: .touchUpInside) }
 	}
 
 	func numberOfRenderedFeedImageViews() -> Int {
